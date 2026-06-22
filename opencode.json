@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": {
+    "paths": [
+      "/Users/jerry/Library/Application Support/qianfan-desktop-app/qianfan_desk_xdg/global/data/skills",
+      "/Users/jerry/Library/Application Support/qianfan-desktop-app/qianfan_desk_xdg/e74a2d6f564f445297d1c3ff0d510744/data/skills/official",
+      "/Users/jerry/Library/Application Support/qianfan-desktop-app/qianfan_desk_xdg/e74a2d6f564f445297d1c3ff0d510744/data/skills/user"
+    ]
+  }
+}

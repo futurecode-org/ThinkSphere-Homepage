@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "appliedSeeds": [
+    "daily-memory-summary:v1"
+  ],
+  "jobs": [
+    {
+      "id": "24d34ce005541468d7481e3576abc605",
+      "seedId": "daily-memory-summary:v1",
+      "workspaceId": "ws_c811202de375",
+      "agent": "daily-summary",
+      "name": "每日记忆总结",
+      "enabled": false,
+      "cronExpr": "0 9 * * *",
+      "timezone": "Local",
+      "executor": {
+        "message": "总结记忆文件，生成结构化的每日总结报告"
+      },
+      "concurrency": "forbid",
+      "retry": {
+        "maxRetries": 0,
+        "maxDelayMs": 3600000
+      },
+      "timeoutSecs": 300,
+      "createdAt": 1777494628878,
+      "updatedAt": 1777494628878,
+      "state": {
+        "nextRunAtMs": 0,
+        "lastRunAtMs": 0,
+        "lastStatus": "",
+        "consecutiveErrors": 0,
+        "retryAfterMs": 0
+      }
+    }
+  ]
+}
