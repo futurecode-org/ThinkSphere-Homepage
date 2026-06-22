@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+
+# Fleet
+.fleet
+
+# jetbrains
+.idea
+
+# VsCode
+.vscode
+
+# Node rules
+.grunt
+
+# Node Modules
+node_modules
+
+package-lock.json
+yarn.lock
+
+# Book build output
+_book
+
+# eBook build output
+*.epub
+*.mobi
+*.pdf
+
+# VitePress
+/docs/.vitepress/cache
+/docs/.vitepress/dist
+
+# Local development environment files
+.env
