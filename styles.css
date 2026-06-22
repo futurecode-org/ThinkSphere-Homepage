@@ -649,6 +649,325 @@ h1, h2, h3, h4 {
 }
 
 /* ============================================
+   Rules Section (Markdown Content)
+   ============================================ */
+.rules {
+    background: var(--color-surface);
+    padding: 120px 0;
+}
+
+.rules-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.rules-content {
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    padding: 48px 56px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Markdown Content Styles */
+.rules-content h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.rules-content h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-navy);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+}
+
+.rules-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.rules-content p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+}
+
+.rules-content ul, .rules-content ol {
+    margin-left: 0;
+    padding-left: 24px;
+    margin-bottom: 16px;
+}
+
+.rules-content li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.rules-content strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.rules-content hr {
+    border: none;
+    height: 1px;
+    background: var(--color-border);
+    margin: 32px 0;
+}
+
+.rules-content blockquote {
+    border-left: 4px solid var(--color-accent);
+    padding-left: 20px;
+    margin: 20px 0;
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.rules-content code {
+    background: var(--color-background-alt);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--color-teal);
+}
+
+/* Team members mention */
+.rules-content p em {
+    color: var(--color-teal);
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* Loading State */
+.rules-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+    color: var(--color-text-secondary);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border-light);
+    border-top-color: var(--color-teal);
+    border-radius: 50%;
+    animation: spinner 0.8s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.rules-error {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--color-text-secondary);
+}
+
+.rules-error-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    color: var(--color-text-tertiary);
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+    .rules-content {
+        padding: 32px 24px;
+    }
+    
+    .rules-content h1 {
+        font-size: 24px;
+    }
+    
+    .rules-content h2 {
+        font-size: 18px;
+        margin-top: 32px;
+    }
+    
+    .rules-content p, .rules-content li {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   Rules Section (Markdown Content)
+   ============================================ */
+.rules {
+    background: var(--color-surface);
+    padding: 120px 0;
+}
+
+.rules-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.rules-content {
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    padding: 48px 56px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Markdown Content Styles */
+.rules-content h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.rules-content h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-navy);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+}
+
+.rules-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.rules-content p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+}
+
+.rules-content ul, .rules-content ol {
+    margin-left: 0;
+    padding-left: 24px;
+    margin-bottom: 16px;
+}
+
+.rules-content li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.rules-content strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.rules-content hr {
+    border: none;
+    height: 1px;
+    background: var(--color-border);
+    margin: 32px 0;
+}
+
+.rules-content blockquote {
+    border-left: 4px solid var(--color-accent);
+    padding-left: 20px;
+    margin: 20px 0;
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.rules-content code {
+    background: var(--color-background-alt);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--color-teal);
+}
+
+/* Team members mention */
+.rules-content p em {
+    color: var(--color-teal);
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* Loading State */
+.rules-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+    color: var(--color-text-secondary);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border-light);
+    border-top-color: var(--color-teal);
+    border-radius: 50%;
+    animation: spinner 0.8s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.rules-error {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--color-text-secondary);
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+    .rules-content {
+        padding: 32px 24px;
+    }
+    
+    .rules-content h1 {
+        font-size: 24px;
+    }
+    
+    .rules-content h2 {
+        font-size: 18px;
+        margin-top: 32px;
+    }
+    
+    .rules-content p, .rules-content li {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
    Features Section
    ============================================ */
 .features {

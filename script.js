@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     initCounterAnimation();
     initSmoothScroll();
+    initMarkdownLoader();
 });
 
 /**
@@ -241,6 +242,82 @@ window.addEventListener('scroll', function() {
         }
     }
 });
+
+/**
+ * Markdown Loader
+ * Loads and renders Markdown content from team-rules.md
+ */
+function initMarkdownLoader() {
+    const markdownContainer = document.getElementById('markdown-content');
+    if (!markdownContainer) return;
+    
+    // Try to load the Markdown file
+    fetch('team-rules.md')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('无法加载团队管理规则文件');
+            }
+            return response.text();
+        })
+        .then(markdownText => {
+            // Parse Markdown to HTML using marked.js
+            if (typeof marked !== 'undefined') {
+                const htmlContent = marked.parse(markdownText);
+                markdownContainer.innerHTML = htmlContent;
+                
+                // Add fade-in animation to the content
+                markdownContainer.classList.add('fade-in');
+                setTimeout(() => {
+                    markdownContainer.classList.add('visible');
+                }, 100);
+            } else {
+                // Fallback: display raw text with simple formatting
+                markdownContainer.innerHTML = formatMarkdownFallback(markdownText);
+            }
+        })
+        .catch(error => {
+            console.error('加载 Markdown 失败:', error);
+            markdownContainer.innerHTML = `
+                <div class="rules-error">
+                    <svg class="rules-error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <p>暂时无法加载团队管理规则</p>
+                    <p style="font-size: 13px; margin-top: 8px;">请检查 team-rules.md 文件是否存在</p>
+                </div>
+            `;
+        });
+}
+
+/**
+ * Fallback Markdown formatter (when marked.js is not available)
+ * Provides basic formatting for headers, lists, and emphasis
+ */
+function formatMarkdownFallback(text) {
+    let html = text
+        // Escape HTML
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        // Headers
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        // Bold
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Italic
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        // Horizontal rules
+        .replace(/^---$/gim, '<hr>')
+        // Lists (basic)
+        .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
+        // Line breaks
+        .replace(/\n/g, '<br>');
+    
+    return `<div style="line-height: 1.8; color: var(--color-text-secondary);">${html}</div>`;
+}
 
 // Add CSS for active nav link
 const style = document.createElement('style');
