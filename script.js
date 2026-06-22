@@ -246,12 +246,28 @@ window.addEventListener('scroll', function() {
 /**
  * Markdown Loader
  * Loads and renders Markdown content from team-rules.md
+ * Supports both http/https and file:// protocols
  */
 function initMarkdownLoader() {
     const markdownContainer = document.getElementById('markdown-content');
     if (!markdownContainer) return;
     
-    // Try to load the Markdown file
+    // Check if running via file:// protocol
+    const isFileProtocol = window.location.protocol === 'file:';
+    
+    if (isFileProtocol) {
+        // For file:// protocol, use XMLHttpRequest which works with local files
+        loadMarkdownViaXHR(markdownContainer);
+    } else {
+        // For http/https, use fetch
+        loadMarkdownViaFetch(markdownContainer);
+    }
+}
+
+/**
+ * Load Markdown using Fetch API (works with http/https)
+ */
+function loadMarkdownViaFetch(container) {
     fetch('team-rules.md')
         .then(response => {
             if (!response.ok) {
@@ -260,35 +276,105 @@ function initMarkdownLoader() {
             return response.text();
         })
         .then(markdownText => {
-            // Parse Markdown to HTML using marked.js
-            if (typeof marked !== 'undefined') {
-                const htmlContent = marked.parse(markdownText);
-                markdownContainer.innerHTML = htmlContent;
-                
-                // Add fade-in animation to the content
-                markdownContainer.classList.add('fade-in');
-                setTimeout(() => {
-                    markdownContainer.classList.add('visible');
-                }, 100);
-            } else {
-                // Fallback: display raw text with simple formatting
-                markdownContainer.innerHTML = formatMarkdownFallback(markdownText);
-            }
+            renderMarkdown(container, markdownText);
         })
         .catch(error => {
             console.error('加载 Markdown 失败:', error);
-            markdownContainer.innerHTML = `
-                <div class="rules-error">
-                    <svg class="rules-error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="12" y1="8" x2="12" y2="12"/>
-                        <line x1="12" y1="16" x2="12.01" y2="16"/>
-                    </svg>
-                    <p>暂时无法加载团队管理规则</p>
-                    <p style="font-size: 13px; margin-top: 8px;">请检查 team-rules.md 文件是否存在</p>
-                </div>
-            `;
+            showMarkdownError(container);
         });
+}
+
+/**
+ * Load Markdown using XMLHttpRequest (works with file:// protocol)
+ */
+function loadMarkdownViaXHR(container) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'team-rules.md', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 0) {
+                // status 0 is acceptable for local files in some browsers
+                renderMarkdown(container, xhr.responseText);
+            } else {
+                console.error('XHR 加载失败, 状态码:', xhr.status);
+                showFileProtocolTip(container);
+            }
+        }
+    };
+    xhr.onerror = function() {
+        console.error('XHR 请求错误 - 浏览器阻止了本地文件访问');
+        showFileProtocolTip(container);
+    };
+    xhr.send();
+}
+
+/**
+ * Render Markdown content to HTML
+ */
+function renderMarkdown(container, markdownText) {
+    if (!markdownText || markdownText.trim().length === 0) {
+        showMarkdownError(container);
+        return;
+    }
+    
+    // Parse Markdown to HTML using marked.js
+    if (typeof marked !== 'undefined') {
+        try {
+            const htmlContent = marked.parse(markdownText);
+            container.innerHTML = htmlContent;
+            
+            // Add fade-in animation to the content
+            container.classList.add('fade-in');
+            setTimeout(() => {
+                container.classList.add('visible');
+            }, 100);
+        } catch (e) {
+            console.error('Markdown 解析错误:', e);
+            container.innerHTML = formatMarkdownFallback(markdownText);
+        }
+    } else {
+        // Fallback: display raw text with simple formatting
+        container.innerHTML = formatMarkdownFallback(markdownText);
+    }
+}
+
+/**
+ * Show error for file:// protocol with helpful tip
+ */
+function showFileProtocolTip(container) {
+    container.innerHTML = `
+        <div class="rules-error" style="text-align: center; padding: 40px 20px;">
+            <svg class="rules-error-icon" style="width: 48px; height: 48px; margin: 0 auto 16px; color: var(--color-text-tertiary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <p style="font-size: 16px; color: var(--color-text-primary); margin-bottom: 8px;">浏览器安全策略阻止了本地文件读取</p>
+            <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 20px;">请通过本地服务器预览，或直接查看 team-rules.md 文件</p>
+            <div style="background: var(--color-background-alt); border-radius: 12px; padding: 16px; margin-top: 16px; text-align: left;">
+                <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; font-weight: 600;">解决方案：</p>
+                <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px;">1. 终端执行: <code style="background: white; padding: 2px 6px; border-radius: 4px;">python3 -m http.server 8080</code></p>
+                <p style="font-size: 13px; color: var(--color-text-secondary);">2. 浏览器访问: <code style="background: white; padding: 2px 6px; border-radius: 4px;">http://localhost:8080</code></p>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Show generic markdown error
+ */
+function showMarkdownError(container) {
+    container.innerHTML = `
+        <div class="rules-error" style="text-align: center; padding: 40px 0;">
+            <svg class="rules-error-icon" style="width: 48px; height: 48px; margin: 0 auto 16px; color: var(--color-text-tertiary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <p>暂时无法加载团队管理规则</p>
+            <p style="font-size: 13px; margin-top: 8px;">请检查 team-rules.md 文件是否存在</p>
+        </div>
+    `;
 }
 
 /**
@@ -298,9 +384,9 @@ function initMarkdownLoader() {
 function formatMarkdownFallback(text) {
     let html = text
         // Escape HTML
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
+        .replace(/&/g, '&amp;amp;')
+        .replace(/</g, '&amp;lt;')
+        .replace(/>/g, '&amp;gt;')
         // Headers
         .replace(/^# (.*$)/gim, '<h1>$1</h1>')
         .replace(/^## (.*$)/gim, '<h2>$1</h2>')
